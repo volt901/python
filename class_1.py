@@ -10,6 +10,7 @@ class Product:
         self.stock = stock
         self.categoria = categoria
 
+    #продажа
     def sell(self, quantity:int)-> int:
         if quantity <= 0:
             raise ValueError("Ошибка ввода: указать количество проданного товара больше 0")
@@ -21,19 +22,38 @@ class Product:
         takings = self.price * quantity
         return takings
 
+    #пополнение
+    def restock(self, quantity:int):
+        if quantity <= 0:
+            raise ValueError("Ошибка ввода: указать количество принятого товара на склад больше 0")
+
+        self.stock += quantity
+
+    #скидка
+    def apply_discount(self, percent:int)->int:
+        if not 0<=percent<=100:
+            raise ValueError("Ошибка ввода: указать количество проданного товара больше 0")
+        self.price = round(self.price * (100 - percent)/100,2)
+        return self.price
+
+    #остаток в денежном эквиваленте
+    def total_value(self)->int:
+        return self.price * self.stock
+
 class Category:
     def __init__(self, name:str, description=""):
         self.name = name
         self.description = description
-        self.__product=[]
+        self.product=[]
 
     def add_product(self, product:Product):
-        self.__product.append(product)
+        if product not in self.product:
+            self.product.append(product)
 
 food = Category("food")
-fish = Product("fish", 99, 10, food)
-print(fish.stock)
-fish.sell(10)
-print(fish.stock)
+food2 = Category("food")
+food.add_product("product")
+food.add_product("product")
+print(food.product)
 
-print(fish.stock)
+fish = Product("fish", 100, 10, food)
