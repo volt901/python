@@ -30,14 +30,14 @@ class Product:
         self.stock += quantity
 
     #скидка
-    def apply_discount(self, percent:int)->int:
+    def apply_discount(self, percent:int)->float:
         if not 0<=percent<=100:
-            raise ValueError("Ошибка ввода: указать количество проданного товара больше 0")
+            raise ValueError("Ошибка ввода: скидка должна быть в диапозоне от 0 до 100%")
         self.price = round(self.price * (100 - percent)/100,2)
         return self.price
 
     #остаток в денежном эквиваленте
-    def total_value(self)->int:
+    def total_value(self)->float:
         return self.price * self.stock
 
 class Category:
@@ -50,10 +50,24 @@ class Category:
         if product not in self.product:
             self.product.append(product)
 
+    def remove_product(self, product:Product):
+        if product in self.product:
+            self.product.remove(product)
+
+    def total_value(self)->float:
+        total = 0.0
+        for n in self.product:
+            total += n.total_value()
+        return total
+
 food = Category("food")
-food2 = Category("food")
-food.add_product("product")
-food.add_product("product")
-print(food.product)
 
 fish = Product("fish", 100, 10, food)
+dog = Product("dog", 10, 10, food)
+
+food.add_product(fish)
+food.add_product(dog)
+
+print(food.total_value())
+
+
