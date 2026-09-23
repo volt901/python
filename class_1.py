@@ -11,7 +11,7 @@ class Product:
         self.categoria = categoria
 
     #продажа
-    def sell(self, quantity:int)-> int:
+    def sell(self, quantity:int)->int:
         if quantity <= 0:
             raise ValueError("Ошибка ввода: указать количество проданного товара больше 0")
 
