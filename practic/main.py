@@ -40,6 +40,24 @@ print(work.pivot_table(index = "category", values='revenue', aggfunc = "sum"))
 
 print("\n Посчитай суммарную выручку по каждому месяцу:")
 print(work.pivot_table(index = "month_name", values='revenue', aggfunc = "sum"))
-# По каждому товару: total_revenue (сумма revenue), orders (кол-во записей), avg_price (средняя price).
 
-# Сгруппируй по ['category', 'month'], посчитай сумму revenue, сбрось индекс.
+print("\n По каждому товару: total_revenue (сумма revenue):")
+print(work.pivot_table(index = "category", values='revenue', aggfunc = "sum", fill_value = 0,
+                       margins = True, margins_name= "total_revenue"
+                       ))
+
+print("\n По каждому товару:  orders (кол-во записей), avg_price (средняя price):")
+print(work.pivot_table(index = "category" , values='revenue', aggfunc = "count", fill_value = 0,
+                       margins = True, margins_name= "orders"
+                       ))
+
+print("\n По каждому товару:  avg_price (средняя price):")
+print(work.pivot_table(index = "category" , values='revenue', aggfunc = "mean", fill_value = 0,
+                       margins = True, margins_name= "avg_price"
+                       ))
+
+
+print("\nСгруппируй по ['category', 'month'], посчитай сумму revenue, сбрось индекс:")
+print(work.pivot_table(index = "month_name", columns = "category" , values='revenue', aggfunc = "sum", fill_value = 0,
+                       margins = True, margins_name= "total_revenue"
+                       ))
