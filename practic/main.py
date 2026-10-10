@@ -61,6 +61,6 @@ print("\nСгруппируй по ['category', 'month'], посчитай су�
 print(work.pivot_table(index = "month_name", columns = "category" , values='revenue', aggfunc = "sum", fill_value = 0,
                        margins = True, margins_name= "total_revenue"
                        ))
-# комментарий
+# все верно
 
 
