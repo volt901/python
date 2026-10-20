@@ -57,8 +57,6 @@ df_date=df_date.rename(columns={'product': 'item', 'revenue': 'income'})
 print(df_date.columns.tolist())
 print(df.columns.tolist())
 
-
-
 print("2.2. Создай маленький DataFrame:")
 print("Переведи a в int, b в float. Выведи типы.")
 nums = pd.DataFrame({
@@ -110,3 +108,69 @@ print(df_new.dtypes)
 print("2.7. Удали все временные столбцы (revenue_check, is_expensive, product_upper, is_big).")
 df_new=df_new.drop(columns=['revenue_check', 'is_expensive', 'product_upper','is_big','is_revenue'])
 print(df_new.columns.tolist())
+
+
+print("\nЧасть 3. Пропуски")
+print("Создадим грязную копию:")
+
+dirty = df.copy()
+dirty.loc[3, 'price'] = np.nan
+dirty.loc[7, 'quantity'] = np.nan
+dirty.loc[15, 'product'] = np.nan
+dirty.loc[20, 'revenue'] = np.nan
+
+print("\n3.1. Сколько пропусков в каждом столбце?")
+print(dirty.isna().sum())
+
+print("\n3.2. Сколько всего пропусков?")
+print(dirty.isna().any(axis=1).sum())
+
+print("\n3.3. Какой процент строк содержит хотя бы один пропуск?")
+print(dirty.isna().mean() * 100)
+
+print("\n3.4. Удали строки, где пропущен price. Сколько строк осталось?")
+print(dirty)
+dirty_filter = dirty.dropna(subset=['price'])
+print(dirty_filter)
+
+print("\n3.5. Заполни пропуск в price средним значением.")
+dirty['price'] = dirty['price'].fillna(dirty['price'].median())
+print(dirty.loc[3, 'price'])
+
+print("\n3.6. Заполни пропуск в quantity нулём.")
+dirty['quantity'] = dirty['quantity'].fillna(0)
+print(dirty.loc[7, 'quantity'])
+
+print("\n3.7. Заполни пропуск в product строкой 'Неизвестно'.")
+dirty['product'] = dirty['product'].fillna('Неизвестно')
+print(dirty.loc[15, 'product'])
+
+print('''\n3.8. Заполни пропуск в revenue, используя price * quantity для той же строки. 
+Подсказка: сначала заполни price и quantity, потом посчитай revenue заново там, где он пропущен.''')
+dirty['revenue'] = dirty['revenue'].fillna(dirty['price']*dirty['quantity'])
+print(dirty.loc[20, 'revenue'])
+
+print(dirty.isna().sum())
+
+print("""
+Часть 4. Дубликаты
+Создай ещё одну копию:
+""")
+dup = df.copy()
+print(dup)
+dup = pd.concat([dup, dup.iloc[[0, 1, 2]]], ignore_index=True)
+print(dup)
+
+print("\n4.1. Сколько полных дубликатов в dup?")
+print("1 полный дубликат")
+
+print("\n4.2. Удали полные дубликаты. Сколько строк осталось?")
+print(dup.drop_duplicates())
+print("\n4.3. Удали дубликаты по product, оставив первое вхождение. Сколько строк?")
+print(dup.drop_duplicates(subset = ["product"]))
+print("\n4.4. То же, но оставив последнее вхождение.")
+print(dup.drop_duplicates(subset = ["product"], keep = "last"))
+print("\n4.5. Удали все строки, которые встречались больше одного раза по product (keep=False).")
+print(dup.drop_duplicates(subset = ["product"], keep = False))
+print("\n4.6. Удали дубликаты по ['product', 'category']. Что это значит?")
+print(dup.drop_duplicates(subset = ['product', 'category']))
