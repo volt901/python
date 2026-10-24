@@ -174,3 +174,4 @@ print("\n4.5. Удали все строки, которые встречали�
 print(dup.drop_duplicates(subset = ["product"], keep = False))
 print("\n4.6. Удали дубликаты по ['product', 'category']. Что это значит?")
 print(dup.drop_duplicates(subset = ['product', 'category']))
+
