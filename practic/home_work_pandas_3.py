@@ -133,3 +133,94 @@ t1 = pd.DataFrame({'A': [1, 2, 3]}, index=['a', 'b', 'c'])
 t2 = pd.DataFrame({'B': [10, 20]}, index=['b', 'c'])
 combaint= pd.concat([t1,t2])
 print(combaint)
+
+"""
+Часть 3. Метод pivot_table
+Для всех заданий этой части используй таблицу merged из задания 1.1 (там есть и бренды, и категории).
+
+3.1. Построй сводную таблицу:
+В строки (index) поставь category.
+
+В столбцы (columns) поставь month.
+
+Значения (values) — сумма revenue.
+
+Добавь fill_value=0.
+
+"""
+merged_pivot_table=merged.pivot_table(index="category",columns="month", values="revenue",fill_value=0)
+print(merged_pivot_table)
+
+"""
+3.2. Построй ту же таблицу, но с итогами. Используй margins=True и margins_name='ИТОГО'. Какая категория принесла больше всего денег за все месяцы?
+"""
+merged_pivot_table=merged.pivot_table(index="category",columns="month", values="revenue",fill_value=0,margins=True,margins_name='ИТОГО' )
+print(merged_pivot_table)
+
+"""
+3.3. Построй сводную таблицу, где:
+
+Строки — supplier (поставщик).
+
+Столбцы — brand (бренд).
+
+Значения — сумма quantity (количество проданных штук).
+(Подсказка: у тебя получатся ячейки с нулями, так как один поставщик не может поставлять все бренды, это нормально).
+"""
+merged_pivot_table=merged.pivot_table(index="supplier",columns="brand", values="quantity",fill_value=0,margins=True,margins_name='ИТОГО' )
+print(merged_pivot_table)
+
+"""
+3.4. Построй сводную таблицу, где:
+
+Строки — month.
+
+Столбцы — category.
+
+Значения — средняя цена (mean от price).
+(Примечание: в этом задании не нужно указывать sum, нужно указать aggfunc='mean').
+
+"""
+merged_pivot_table=merged.pivot_table(index="month",columns="category", values="price",aggfunc='mean',fill_value=0,margins=True,margins_name='ИТОГО' )
+print(merged_pivot_table)
+
+"""
+Часть 4. Комплексная задача
+Собери все навыки вместе. Представь, что ты делаешь отчет для директора магазина.
+Сделай left merge df и products_info. Сохрани в merged.
+"""
+merged = pd.merge(df, products_info, on='product', how='left')
+print(merged)
+
+"""
+Найди общую выручку (revenue) по каждому поставщику (supplier). Отсортируй по убыванию.
+"""
+merged_pivot_table=merged.pivot_table(index="supplier",columns="category", values="revenue",fill_value=0,margins=True,margins_name='ИТОГО' )
+print(merged_pivot_table)
+print(merged_pivot_table.sort_values(by='ИТОГО', ascending=False))
+"""
+Создай таблицу q1 (первый квартал: month равно 1, 2 или 3).
+"""
+q1=merged [merged["month"].isin([1,2,3])]
+print(q1)
+"""
+Создай таблицу q2 (второй квартал: month равно 4, 5, 6).
+"""
+q2=merged[merged["month"].isin([4,5,6])]
+print(q2)
+"""
+Склей q1 и q2 через concat с ignore_index=True. Назови результат first_half.
+"""
+first_half= pd.concat([q1,q2],ignore_index=True)
+print(first_half)
+"""
+Используя first_half и информацию о брендах, построй pivot_table:
+
+Строки: brand.
+Столбцы: category.
+Значения: сумма revenue.
+С итогами (margins) и заменой пустых ячеек на 0.
+
+"""
+first_half__table=first_half.pivot_table(index="brand",columns="category", values="revenue",fill_value=0,margins=True,margins_name='ИТОГО' )
+print(first_half__table)
