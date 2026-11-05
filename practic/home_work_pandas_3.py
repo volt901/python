@@ -123,7 +123,7 @@ print (len(df_jm) == len(df_j) + len(df_m))
 (с параметром и без), чтобы увидеть разницу.
 '''
 print(df_jm.index)
-df_jm= pd.concat([df_j,df_m])
+df_jm= pd.concat([df_j,df_m],ignore_index=False)
 print(df_jm.index)
 '''
 2.4. Создай два датафрейма:
@@ -131,7 +131,7 @@ print(df_jm.index)
 '''
 t1 = pd.DataFrame({'A': [1, 2, 3]}, index=['a', 'b', 'c'])
 t2 = pd.DataFrame({'B': [10, 20]}, index=['b', 'c'])
-combaint= pd.concat([t1,t2])
+combaint= pd.concat([t1,t2],axis=1)
 print(combaint)
 
 """
